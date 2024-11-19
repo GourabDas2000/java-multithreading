@@ -1,4 +1,4 @@
-import java.util.*;
+
 public class NormalFirst {
     public static void main(String[] args) {
         FirstTh f = new FirstTh();
