@@ -16,7 +16,7 @@ public class LifeCycleThread extends Thread {
         System.out.println(lc.getState());//new
         lc.start();
         System.out.println(lc.getState());// runnable
-        lc.sleep(100);
+        try{ lc.sleep(100); } catch(Exception e){}
         System.out.println(lc.getState());//Timed waiting
         lc.interrupt();//blocked
         System.out.println(lc.getState());
