@@ -1,4 +1,8 @@
+import java.security.Timestamp;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ExecutorFrameworks {
     public void factorial(int data){
@@ -9,10 +13,8 @@ public class ExecutorFrameworks {
         System.out.println(count);
     }
     public static void main(String[] args) {
-
+        
         // Before Executor Framework Introduction
-
-
         // long starttime = System.currentTimeMillis();
         // Thread[] threads = new Thread[9];
         // ExecutorFrameworks exfame = new ExecutorFrameworks();
@@ -39,14 +41,46 @@ public class ExecutorFrameworks {
         // }
         // long result =  starttime - System.currentTimeMillis();
         // System.out.println("Execution time " + result);
-
-        //After Executor Introduction
-
-        // ExecutorFrameworks exfam2 = new ExecutorFrameworks();
-        // ExecutorService executor = new ExecutorService() {
-            
-        // };
         
+
+        // With Executor Framework
+        long start = System.currentTimeMillis();
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        // ExecutorService executor = Executors.newCachedThreadPool();
+        for(int i = 1 ; i<=9 ;i++ ){
+            int finali = i;
+            ExecutorFrameworks exf = new ExecutorFrameworks();
+            executor.submit(() -> {
+                    try{
+                        Thread.sleep(1000);
+                        exf.factorial(finali);
+                    }catch(InterruptedException e){
+                        Thread.currentThread().interrupt();
+                    }
+            });
+        }
+        
+        executor.shutdown(); 
+
+        // executor.shutdownNow();
+
+        try {
+            while(!executor.awaitTermination(2000, TimeUnit.MILLISECONDS)){
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+
+        while(!executor.isTerminated()){ // wait until it terminates
+        }
+
+
+        long result = System.currentTimeMillis() - start;
+        System.out.println("Time : " + result);
+        
+
 
     }
 }
